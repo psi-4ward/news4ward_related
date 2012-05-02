@@ -1,0 +1,5 @@
+
+<div class="layout_related news4ward_list block<?php echo $this->class; ?>">
+<h3><a href="<?php echo $this->link; ?>"><?php echo $this->title; ?></a></h3>
+<a href="<?php echo $this->link; ?>" class="more">Weiterlesen...</a>
+</div>

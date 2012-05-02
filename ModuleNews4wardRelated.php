@@ -62,6 +62,7 @@ class ModuleNews4wardRelated extends News4ward
 	public function compile()
 	{
 
+		$this->import('News4wardHelper');
 /*
  * Vieleicht hat ein self-join query bessere performance
  * in diesem fall müsste man aber die keywords ebenfalls in eine 1:N tabelle auslagern
@@ -99,7 +100,7 @@ class ModuleNews4wardRelated extends News4ward
 
 		if(!$objArticle->numRows)
 		{
-			$tpl->items = array();
+			$this->Template->articles = array();
 			return;
 		}
 
@@ -115,8 +116,12 @@ class ModuleNews4wardRelated extends News4ward
 				$words .= ' '.$objTags->tag;
 
 			// use the view if news4ward_tags is installed
-			$objErg = $this->Database->prepare('
-				SELECT *, MATCH (keywords,tags,title,description) AGAINST (? IN BOOLEAN MODE) AS score
+			$objRelatedArticles = $this->Database->prepare('
+				SELECT *, author AS authorId,
+						(SELECT title FROM tl_news4ward WHERE tl_news4ward.id=article.pid) AS archive,
+						(SELECT jumpTo FROM tl_news4ward WHERE tl_news4ward.id=article.pid) AS parentJumpTo,
+						(SELECT name FROM tl_user WHERE id=author) AS author,
+						MATCH (keywords,tags,title,description) AGAINST (? IN BOOLEAN MODE) AS score
 				FROM tl_news4ward_articleWithTags AS article
 				WHERE id<>? AND '.implode(' AND ',$where).'
 					AND MATCH (keywords,tags,title,description) AGAINST (? IN BOOLEAN MODE) > 0
@@ -124,8 +129,12 @@ class ModuleNews4wardRelated extends News4ward
 		}
 		else
 		{
-			$objErg = $this->Database->prepare('
-				SELECT *, MATCH (keywords,title,description) AGAINST (? IN BOOLEAN MODE) AS score
+			$objRelatedArticles = $this->Database->prepare('
+				SELECT *, author AS authorId,
+						(SELECT title FROM tl_news4ward WHERE tl_news4ward.id=article.pid) AS archive,
+						(SELECT jumpTo FROM tl_news4ward WHERE tl_news4ward.id=article.pid) AS parentJumpTo,
+						(SELECT name FROM tl_user WHERE id=author) AS author,
+						MATCH (keywords,title,description) AGAINST (? IN BOOLEAN MODE) AS score
 				FROM tl_news4ward_article AS article
 				WHERE id<>? AND '.implode(' AND ',$where).'
 					AND MATCH (keywords,title,description) AGAINST (? IN BOOLEAN MODE) > 0
@@ -135,19 +144,11 @@ class ModuleNews4wardRelated extends News4ward
 
 		// limit the result
 		if($this->news4ward_related_count > 0)
-			$objErg->limit($this->news4ward_related_count);
+			$objRelatedArticles->limit($this->news4ward_related_count);
 
-		$objErg = $objErg->execute($words, $objArticle->id, $words);
+		$objRelatedArticles = $objRelatedArticles->execute($words, $objArticle->id, $words);
 
-		// generate links
-		while($objErg->next())
-		{
-			$objErg->href = $this->generateUrl($objErg);
-		}
-
-
-		$this->Template->items = $objErg->fetchAllAssoc();
-
+		$this->Template->articles = $this->parseArticles($objRelatedArticles);
 	}
 }
 

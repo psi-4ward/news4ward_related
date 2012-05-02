@@ -17,4 +17,3 @@ $GLOBALS['FE_MOD']['news4ward']['news4wardRelated'] = 'ModuleNews4wardRelated';
 
 // Hook for updateDatabase to create the view if news4ward_tags is installed
 $GLOBALS['TL_HOOKS']['sqlCompileCommands'][] = array('News4wardRelatedHelper','sqlCompileCommands');
-?>
