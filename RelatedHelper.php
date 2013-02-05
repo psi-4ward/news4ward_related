@@ -1,4 +1,4 @@
-<?php if(!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
 
 /**
  * News4ward
@@ -10,8 +10,9 @@
  * @filesource
  * @licence LGPL
  */
- 
-class News4wardRelatedHelper extends System
+namespace Psi\News4ward;
+
+class RelatedHelper extends \Controller 
 {
 
 	/**

@@ -11,9 +11,7 @@
  * @licence LGPL
  */
 
-
 // FE-Modules
-$GLOBALS['FE_MOD']['news4ward']['news4wardRelated'] = '\News4ward\Module\Related';
+$GLOBALS['TL_LANG']['FMD']['news4wardRelated']    = array('Related entries', 'Generates a list of related entries on the page.');
 
-// Hook for updateDatabase to create the view if news4ward_tags is installed
-$GLOBALS['TL_HOOKS']['sqlCompileCommands'][] = array('\News4ward\RelatedHelper','sqlCompileCommands');
+?>

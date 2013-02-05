@@ -1,4 +1,4 @@
-<?php if(!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
 
 /**
  * News4ward
@@ -10,8 +10,9 @@
  * @filesource
  * @licence LGPL
  */
+namespace Psi\News4ward\Module;
 
-class ModuleNews4wardRelated extends News4ward
+class Related extends \News4ward\Module\Module
 {
 	/**
    	 * Template
@@ -28,7 +29,7 @@ class ModuleNews4wardRelated extends News4ward
 	{
 		if (TL_MODE == 'BE')
 		{
-			$objTemplate = new BackendTemplate('be_wildcard');
+			$objTemplate = new \BackendTemplate('be_wildcard');
 
 			$objTemplate->wildcard = '### News4ward related articles ###';
 			$objTemplate->title = $this->headline;
@@ -62,7 +63,7 @@ class ModuleNews4wardRelated extends News4ward
 	public function compile()
 	{
 
-		$this->import('News4wardHelper');
+		$this->import('\News4ward\Helper','Helper');
 /*
  * Vieleicht hat ein self-join query bessere performance
  * in diesem fall müsste man aber die keywords ebenfalls in eine 1:N tabelle auslagern

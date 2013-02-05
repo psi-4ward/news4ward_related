@@ -12,8 +12,4 @@
  */
 
 
-// FE-Modules
-$GLOBALS['FE_MOD']['news4ward']['news4wardRelated'] = '\News4ward\Module\Related';
-
-// Hook for updateDatabase to create the view if news4ward_tags is installed
-$GLOBALS['TL_HOOKS']['sqlCompileCommands'][] = array('\News4ward\RelatedHelper','sqlCompileCommands');
+$GLOBALS['TL_LANG']['tl_module']['news4ward_related_count']  		= array('Number of displayed entries', 'Here you can limit the maximal number of related entries.');
