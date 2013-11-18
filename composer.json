@@ -22,7 +22,7 @@
         "require":{
                 "php":">=5.3",
                 "contao/core": ">=3.1,<3.3",
-                "psi/news4ward": "~2",
+                "psi/news4ward": "~2"
         },
         "replace":{
                 "contao-legacy/news4ward_related": "*"
