@@ -12,7 +12,7 @@
  */
 namespace Psi\News4ward\Module;
 
-class Related extends \News4ward\Module\Module
+class Related extends Module
 {
 	/**
    	 * Template
@@ -78,14 +78,21 @@ class Related extends \News4ward\Module\Module
 
 		/* build where */
 		$where = array();
+		$whereValues = array();
 
 		// news archives
-		$where[] = 'article.pid IN('. implode(',', array_map('intval', $this->news_archives)) . ')';
+		$where[] = 'article.pid IN(?)';
+		$whereValues[] = implode(',', array_map('intval', $this->news_archives));
+
+		$where[] = 'article.alias=?';
+		$whereValues[] = $this->alias;
 
 		// published
 		if(!BE_USER_LOGGED_IN)
 		{
-			$where[] = "(article.start='' OR article.start<".time().") AND (article.stop='' OR article.stop>".time().") AND article.status='published'";
+			$where[] = "(article.start='' OR article.start<?) AND (article.stop='' OR article.stop>?) AND article.status='published'";
+			$whereValues[] = time();
+			$whereValues[] = time();
 		}
 
 		// @todo filter protected
@@ -96,8 +103,7 @@ class Related extends \News4ward\Module\Module
 			SELECT article.id, article.pid, article.keywords,
 				(SELECT jumpTo FROM tl_news4ward WHERE tl_news4ward.id=article.pid) AS parentJumpTo
 			FROM tl_news4ward_article AS article
-			WHERE ".implode(' AND ',$where)
-				.' AND article.alias = "'.mysql_real_escape_string($this->alias).'"')->execute();
+			WHERE ".implode(' AND ',$where))->execute($whereValues);
 
 		if(!$objArticle->numRows)
 		{
@@ -147,7 +153,11 @@ class Related extends \News4ward\Module\Module
 		if($this->news4ward_related_count > 0)
 			$objRelatedArticles->limit($this->news4ward_related_count);
 
-		$objRelatedArticles = $objRelatedArticles->execute($words, $objArticle->id, $words);
+		array_unshift($whereValues, $objArticle->id);
+		array_unshift($whereValues, $words);
+		$whereValues[] = $words;
+
+		$objRelatedArticles = $objRelatedArticles->execute($whereValues);
 
 		$this->Template->articles = $this->parseArticles($objRelatedArticles);
 	}

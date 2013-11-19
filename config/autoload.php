@@ -28,5 +28,3 @@ TemplateLoader::addFiles(array
 	'mod_news4ward_related' 			=> 'system/modules/news4ward_related/templates',
 	'news4ward_list_related' 			=> 'system/modules/news4ward_related/templates',
 ));
-
-?>
