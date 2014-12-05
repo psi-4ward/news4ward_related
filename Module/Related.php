@@ -111,6 +111,8 @@ class Related extends Module
 			return;
 		}
 
+		unset($where['alias']);
+		unset($whereValues['alias']);
 
 		$words = $objArticle->keywords;
 
@@ -159,7 +161,7 @@ class Related extends Module
 
 		$objRelatedArticles = $objRelatedArticles->execute($whereValues);
 
-		$this->Template->articles = $this->parseArticles($objRelatedArticles);
+		$this->Template->articles = $this->parseArticles($objRelatedArticles->fetchAllAssoc());
 	}
 }
 
