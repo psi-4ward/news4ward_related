@@ -1,5 +1,15 @@
 
 <div class="layout_related news4ward_list block<?php echo $this->class; ?>">
-<h3><a href="<?php echo $this->link; ?>"><?php echo $this->title; ?></a></h3>
-<a href="<?php echo $this->link; ?>" class="more">Weiterlesen...</a>
+	<h3><a href="<?php echo $this->link; ?>"><?php echo $this->title; ?></a></h3>
+
+	<?php if(!empty($this->teaserImage)): ?>
+		<figure class="image_container">
+			<img src="<?php echo $this->teaserImage; ?>" alt="<?php echo $this->title; ?>">
+			<?php if($this->teaserImageCaption): ?>
+				<figcaption class="caption" style="width:<?php echo $this->arrSize[0]; ?>px"><?php echo $this->teaserImageCaption; ?></figcaption>
+			<?php endif; ?>
+		</figure>
+	<?php endif; ?>
+
+	<a href="<?php echo $this->link; ?>" class="more">Weiterlesen...</a>
 </div>
