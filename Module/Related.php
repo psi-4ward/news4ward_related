@@ -84,8 +84,8 @@ class Related extends Module
 		$where[] = 'article.pid IN(?)';
 		$whereValues[] = implode(',', array_map('intval', $this->news_archives));
 
-		$where[] = 'article.alias=?';
-		$whereValues[] = $this->alias;
+		$where['alias'] = 'article.alias=?';
+		$whereValues['alias'] = $this->alias;
 
 		// published
 		if(!BE_USER_LOGGED_IN)
